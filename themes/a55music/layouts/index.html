@@ -1,0 +1,49 @@
+{{ define "main" }}
+{{ $headless := .Site.GetPage "/homepage" }}
+{{ $sections := $headless.Resources.ByType "page" }}
+{{ $sections := cond .Site.BuildDrafts $sections (where $sections "Draft" "==" false) }}
+
+<link rel="stylesheet" href='{{ "css/glitch.css" | absURL }}'>
+<header id="site-head" {{ with .Params.header_image }}style="background-image: url({{ . }})"{{ end }}>
+
+    <div class="vertical">
+  <div class="hero-container">
+
+    <div class="environment"></div>
+    {{ with .Params.header_headline }}    <h1 class="hero glitch layers blog-title" data-text={{ . }}><span>{{ . }}</span></h1> {{ end }}
+
+            {{ with .Params.header_subheadline }}<h2 class="blog-description">{{ . }}</h2>{{ end }}
+  </div>
+
+        <div id="site-head-content" class="inner">
+
+
+            {{ range where $sections ".Params.header_menu" "eq" true }}
+                 <a class='btn site-menu' data-title-anchor='{{ anchorize .Title }}'>{{ .Title }}</a>
+            {{ end }}
+                 <a class='btn site-menu' href="{{ "/services" | relURL }}" data-title-anchor='services'>Services Page</a>
+                 <a class='btn site-menu' href="{{ "/test" | relURL }}" data-title-anchor='testpage'>Test Page</a>
+
+            <i id='header-arrow' class="fa fa-angle-down"></i>
+        </div>
+    </div>
+</header>
+<main class="content" role="main">
+    <div class='fixed-nav'>
+    </div>
+    {{ range $index_val, $elem_val := $sections }}
+        <div class='post-holder'>
+            <article id='{{ anchorize .Title }}' class='post {{ if eq $index_val 0 }}first{{ end }} {{ if eq (add $index_val 1) (len $sections) }}last{{ end }}'>
+                <header class="post-header">
+                    <h2 class="post-title">{{ .Title }}</h2>
+                </header>
+                <section class="post-content">
+                    {{ .Content }}
+                </section>
+            </article>
+            <div class='post-after'></div>
+        </div>
+
+    {{ end }}
+</main>
+{{ end }}

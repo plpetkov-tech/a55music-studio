@@ -1,0 +1,15 @@
+<footer class="site-footer">
+  <div class="inner">
+    
+      <section class="copyright">{{ with .Site.Params.copyright }} {{ . | markdownify }}{{ end }} {{ now.Year }} </section>
+
+
+    <section>{{ echoParam .Site.Params "hidebyline" }}</section>
+    {{ if ne .Site.Params.hidedesignbyline true }}
+      <section>
+        Made with ♥️  by
+        <a href="https://www.plamenpetkovonline.com" title="Plamen Petkov">Plamen Petkov</a>
+      </section>{{ end }}
+
+  </div>
+</footer>
